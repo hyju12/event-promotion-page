@@ -250,7 +250,7 @@
 </script>
 
 <style scoped>
-  @reference "../assets/main.css";
+  @import "tailwindcss";
 
   .input-style {
     @apply w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all;
