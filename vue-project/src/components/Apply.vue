@@ -1,13 +1,16 @@
 <template>
-  <section class="max-w-lg mx-auto px-4 py-20 reveal">
-    <div class="bg-white border border-gray-100 rounded-[32px] p-8 md:p-10 shadow-2xl">
+  <section class="max-w-lg px-4 py-20 mx-auto">
+    <div
+      class="bg-white border border-gray-100 rounded-[32px] p-8 md:p-10 shadow-2xl transition-all duration-300"
+      style="opacity: 1 !important; visibility: visible !important"
+    >
       <div
         v-if="hasApplied"
-        class="text-center py-10"
+        class="py-10 text-center"
       >
-        <div class="text-5xl mb-4">✅</div>
-        <p class="text-slate-800 font-bold text-xl mb-2">응모 완료되었습니다!</p>
-        <p class="text-slate-500 text-sm">결과 발표를 기다려주세요.</p>
+        <div class="mb-4 text-5xl">✅</div>
+        <p class="mb-2 text-xl font-bold text-slate-800">응모가 완료되었습니다!</p>
+        <p class="text-sm text-slate-500">결과 발표를 기다려주세요.</p>
       </div>
 
       <form
@@ -15,26 +18,27 @@
         @submit.prevent="submitForm"
         class="space-y-6"
       >
-        <h3 class="text-2xl font-bold mb-8 text-slate-900 text-center">이벤트 응모하기</h3>
+        <h3 class="mb-8 text-2xl font-bold text-center text-slate-900">이벤트 응모하기</h3>
+
         <div class="space-y-2">
-          <label class="block text-sm font-bold text-slate-700 ml-1">이름</label>
+          <label class="block ml-1 text-sm font-bold text-slate-700">이름</label>
           <input
             v-model="form.name"
             type="text"
             placeholder="성함을 입력해주세요"
             class="input-style"
-            :class="{ 'border-red-500 focus:ring-red-100': errors.name }"
+            :class="{ 'border-red-500 focus:ring-red-500': errors.name }"
           />
           <p
             v-if="errors.name"
-            class="text-red-500 text-xs ml-1 font-medium"
+            class="ml-1 text-xs font-medium text-red-500"
           >
             {{ errors.name }}
           </p>
         </div>
 
         <div class="space-y-2">
-          <label class="block text-sm font-bold text-slate-700 ml-1">연락처</label>
+          <label class="block ml-1 text-sm font-bold text-slate-700">연락처</label>
           <input
             v-model="form.phone"
             type="tel"
@@ -42,51 +46,51 @@
             placeholder="010-0000-0000"
             maxlength="13"
             class="input-style"
-            :class="{ 'border-red-500 focus:ring-red-100': errors.phone }"
+            :class="{ 'border-red-500 focus:ring-red-500': errors.phone }"
           />
           <p
             v-if="errors.phone"
-            class="text-red-500 text-xs ml-1 font-medium"
+            class="ml-1 text-xs font-medium text-red-500"
           >
             {{ errors.phone }}
           </p>
         </div>
 
         <div class="space-y-2">
-          <label class="block text-sm font-bold text-slate-700 ml-1">이메일</label>
+          <label class="block ml-1 text-sm font-bold text-slate-700">이메일</label>
           <input
             v-model="form.email"
             type="email"
             placeholder="example@email.com"
             class="input-style"
-            :class="{ 'border-red-500 focus:ring-red-100': errors.email }"
+            :class="{ 'border-red-500 focus:ring-red-500': errors.email }"
           />
           <p
             v-if="errors.email"
-            class="text-red-500 text-xs ml-1 font-medium"
+            class="ml-1 text-xs font-medium text-red-500"
           >
             {{ errors.email }}
           </p>
         </div>
 
-        <div class="bg-gray-50 p-4 rounded-2xl">
+        <div class="p-4 bg-slate-50 rounded-2xl">
           <div class="flex items-center gap-3">
             <input
               v-model="form.agreedTerms"
               type="checkbox"
               id="terms"
-              class="w-5 h-5 accent-blue-600 cursor-pointer"
+              class="w-5 h-5 cursor-pointer accent-blue-600"
             />
             <label
               for="terms"
-              class="text-sm text-slate-600 font-medium cursor-pointer select-none"
+              class="text-sm font-medium cursor-pointer select-none text-slate-600"
             >
               개인정보 수집 및 이용에 동의합니다.
             </label>
           </div>
           <p
             v-if="errors.agreedTerms"
-            class="text-red-500 text-xs mt-2 ml-1 font-medium"
+            class="mt-2 ml-1 text-xs font-medium text-red-500"
           >
             {{ errors.agreedTerms }}
           </p>
@@ -95,7 +99,7 @@
         <button
           :disabled="isSubmitting"
           type="submit"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-200 active:scale-[0.98] transition-all disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-100 active:scale-[0.98] transition-all duration-200 disabled:bg-slate-300 disabled:cursor-not-allowed"
         >
           <span v-if="!isSubmitting">응모 완료하기</span>
           <span
@@ -103,7 +107,7 @@
             class="flex items-center justify-center gap-2"
           >
             <svg
-              class="animate-spin h-5 w-5 text-white"
+              class="w-5 h-5 text-white animate-spin"
               viewBox="0 0 24 24"
             >
               <circle
@@ -130,96 +134,60 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from "vue";
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  interface FormState {
-    name: string;
-    phone: string;
-    email: string;
-    agreedTerms: boolean;
-  }
-
-  interface ErrorState {
-    name?: string;
-    phone?: string;
-    email?: string;
-    agreedTerms?: string;
-  }
+  import { ref, reactive, onMounted, nextTick } from "vue";
 
   const isSubmitting = ref(false);
   const hasApplied = ref(false);
 
-  const form = ref<FormState>({
+  const form = ref({
     name: "",
     phone: "",
     email: "",
     agreedTerms: false,
   });
 
-  const errors = reactive<ErrorState>({});
+  const errors = reactive<Record<string, string>>({
+    name: "",
+    phone: "",
+    email: "",
+    agreedTerms: "",
+  });
 
   onMounted(() => {
     if (localStorage.getItem("hasApplied") === "true") {
       hasApplied.value = true;
-    } else {
-      gsap.from(".reveal", {
-        scrollTrigger: {
-          trigger: ".reveal",
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        ease: "power2.out",
-        clearProps: "all",
-      });
     }
   });
 
-  const formatPhone = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    const cleaned = target.value.replace(/\D/g, "");
-    form.value.phone = cleaned.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, "$1-$2-$3").slice(0, 13);
+  const validate = (): boolean => {
+    errors.name = form.value.name.trim().length < 2 ? "이름을 2자 이상 입력해주세요." : "";
+    errors.phone = !/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(form.value.phone)
+      ? "번호 형식을 확인해주세요."
+      : "";
+    errors.email = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)
+      ? "이메일 형식을 확인해주세요."
+      : "";
+    errors.agreedTerms = !form.value.agreedTerms ? "필수 동의 항목입니다." : "";
+
+    return !Object.values(errors).some((msg) => msg !== "");
   };
 
-  const validate = (): boolean => {
-    Object.keys(errors).forEach((key) => (errors[key as keyof ErrorState] = ""));
-    let isValid = true;
+  const formatPhone = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    let val = target.value.replace(/\D/g, "");
 
-    if (form.value.name.trim().length < 2) {
-      errors.name = "이름을 2자 이상 입력해주세요.";
-      isValid = false;
+    if (val.length <= 11) {
+      if (val.length > 7) {
+        val = val.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+      } else if (val.length > 3) {
+        val = val.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+      }
     }
-
-    const phoneRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-    if (!phoneRegex.test(form.value.phone)) {
-      errors.phone = "올바른 휴대폰 번호를 입력해주세요.";
-      isValid = false;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.value.email)) {
-      errors.email = "올바른 이메일 형식이 아닙니다.";
-      isValid = false;
-    }
-
-    if (!form.value.agreedTerms) {
-      errors.agreedTerms = "개인정보 수집 동의가 필요합니다.";
-      isValid = false;
-    }
-
-    return isValid;
+    form.value.phone = val.slice(0, 13);
   };
 
   const submitForm = async () => {
-    if (hasApplied.value) return;
     if (!validate()) return;
-
     isSubmitting.value = true;
 
     try {
@@ -230,16 +198,12 @@
       });
 
       if (res.ok) {
-        gsap.to(".reveal", {
-          scale: 1.05,
-          duration: 0.2,
-          yoyo: true,
-          repeat: 1,
-          ease: "power2.inOut",
-        });
-        alert("🎉 응모가 완료되었습니다!");
         localStorage.setItem("hasApplied", "true");
         hasApplied.value = true;
+
+        await nextTick();
+        const el = document.querySelector(".max-w-lg");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     } catch (err) {
       alert("오류가 발생했습니다. 다시 시도해주세요.");
