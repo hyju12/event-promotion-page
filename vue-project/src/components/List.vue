@@ -44,8 +44,6 @@
       //이벤트는 1개로 가정
       eventInfo.value = response.data[0];
 
-      console.log(response.data);
-
       await nextTick();
       initAnimations();
     } catch (error) {
@@ -77,31 +75,31 @@
 </script>
 
 <template>
-  <section class="py-24 px-6 max-w-6xl mx-auto bg-gray-50">
-    <div class="text-center mb-16">
-      <h2 class="text-3xl md:text-5xl font-black mb-5 text-slate-900 tracking-tight">
+  <section class="max-w-6xl px-6 py-24 mx-auto bg-gray-50">
+    <div class="mb-16 text-center">
+      <h2 class="mb-5 text-3xl font-black tracking-tight md:text-5xl text-slate-900">
         특별한 혜택을 놓치지 마세요
       </h2>
-      <p class="text-slate-600 text-lg font-medium">
+      <p class="text-lg font-medium text-slate-600">
         이벤트에 참여하신 분들을 위한 선물이 준비되어 있습니다.
       </p>
     </div>
 
-    <div class="reward-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 gap-8 reward-grid md:grid-cols-3">
       <div
         v-for="reward in rewards"
         :key="reward.id"
-        class="reward-card group bg-white border border-gray-200 rounded-3xl p-8 transition-all duration-300 shadow-sm hover:shadow-xl"
+        class="p-8 transition-all duration-300 bg-white border border-gray-200 shadow-sm reward-card group rounded-3xl hover:shadow-xl"
       >
         <div class="relative z-10">
-          <h3 class="text-2xl font-bold mb-3 text-slate-900">
+          <h3 class="mb-3 text-2xl font-bold text-slate-900">
             {{ reward.name }}
           </h3>
           <img :src="reward.image ? `/${reward.image}` : '/unknown.png'" />
         </div>
 
         <div
-          class="absolute top-6 right-6 text-sm font-black font-mono text-gray-200 group-hover:text-gray-400 transition-colors"
+          class="absolute font-mono text-sm font-black text-gray-200 transition-colors top-6 right-6 group-hover:text-gray-400"
         >
           0{{ reward.id }}
         </div>
