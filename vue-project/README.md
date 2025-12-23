@@ -1,38 +1,36 @@
-# vue-project
+# 실행 방법
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
 
-### Compile and Minify for Production
-
-```sh
 npm run build
-```
+
+# 사용한 라이브러리 및 선택 이유
+
+Tailwind CSS
+
+- 유틸리티 퍼스트 프레임워크를 활용하여 별도의 CSS 관리 부담을 줄이고, 일관된 UI 스타일을 빠르게 구현했습니다.
+
+GSAP
+
+- 사용자 경험을 향상시키는 인터랙션을 구현하기 위해 사용했습니다.
+
+MockAPI
+
+- 배포 환경에서의 안정성을 최우선으로 고려했습니다. 로컬 서버 없이도 실제 배포 환경(Vercel 등)에서 RESTful API 통신 과정을 완벽히 재현하고 데이터를 검증할 수 있어 선택했습니다.
+
+# 구현 시 고민한 점
+
+1. 사용자 중심의 입력 경험 (UX) 최적화
+   전화번호 자동 포맷팅: 사용자가 연락처를 입력할 때 하이픈(-)을 직접 입력해야 하는 번거로움을 줄이기 위해, 입력값에 따라 실시간으로 형식을 변환하는 정규식 로직을 구현했습니다. 이는 데이터 정합성을 높이는 동시에 사용자 편의성을 크게 향상시켰습니다.
+
+실시간 유효성 검사: 폼 제출 시에만 에러를 보여주는 것이 아니라, 각 필드별로 즉각적인 피드백을 제공하여 사용자가 흐름을 끊기지 않고 오류를 수정할 수 있도록 설계했습니다.
+
+2. 기술적 안정성과 인터랙션 사이의 균형
+   애니메이션 트러블슈팅: 초기에는 GSAP를 활용한 화려한 등장 효과를 기획했으나, 브라우저 새로고침이나 스크롤 위치에 따라 요소가 불투명하게 멈춰있는 이슈를 발견했습니다.
+
+해결 방안: 시각적 화려함보다 콘텐츠의 확실한 전달이 더 중요하다는 판단하에, 복잡한 스크롤 트리거 대신 Vue의 nextTick과 상태 제어를 활용하여 어떤 환경에서도 폼이 즉시 노출되도록 구조를 개선했습니다.
+
+3. 중복 응모 방지 및 상태 유지
+   사용자 한 명이 여러 번 응모하는 것을 방지하기 위해 localStorage를 활용했습니다. 응모 완료 시 플래그를 저장하고, 페이지 재진입 시 이를 확인하여 폼 대신 '완료 메시지'를 보여줌으로써 불필요한 API 요청을 차단하고 서버 자원을 보호했습니다.
